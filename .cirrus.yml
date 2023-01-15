@@ -1,0 +1,15 @@
+env:
+    token: "ENCRYPTED[91aa86249a2b8217c4416fd0688d5f96bd0f1c00043f546a4c588cc41f1e1e9233082dbd36ac2f5624e3843ff1136e63]"
+    chat_id: "ENCRYPTED[271123886e84714e0f103ef02e04c0e8f59d20e429fb1c0f118b20bf88b4a98f966b095e487c0ba21ceb314215d0b060]"
+    
+task:
+    name: "Kernel deploy.."
+    timeout_in: 2h
+    container:
+        image: nexgang/ubuntu:latest
+        cpu: 4
+        memory: 16G
+
+  Build_script:
+        - git clone --depth=1 -b lineage-20 https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768 lv && cd lv
+        - bash build.sh --proton 
