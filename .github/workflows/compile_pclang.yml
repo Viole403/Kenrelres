@@ -19,8 +19,8 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/kerolosel3w/Iron-Kernel-Personal.git
-  REPO_BRANCH: 12
+  REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
+  REPO_BRANCH: lineage-20
   COMPER_URL: https://github.com/kdrag0n/proton-clang.git
   CONFIG_FILE: .config
   UPLOAD_BIN_DIR: true
@@ -30,7 +30,7 @@ env:
   ARCH: arm64
   SUBARCH: arm64
   DEVICE: cepheus
-  DEVICE_FULL: cepheus_defconfig
+  DEVICE_FULL: lancelot_defconfig
   USE_CCACHE: 1
   CCACHE_DIR: ~/.ccache
   BUILDER: /workdir/toolchain/bin/
