@@ -3,15 +3,15 @@ name: Kernel Builder
 on:
   workflow_dispatch:
     inputs:
-          REPO_LINK:
+         REPO_LINK:
           description: "Kernel Tree Repo Link"
           required: true
-          default: "https://github.com/violesec/kernel.git"
+          default: "https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git"
 
-          BRANCH_NAME:
+         BRANCH_NAME:
           description: "Kernel Tree Branch Name"
           required: true
-          default: "main"
+          default: "lineage-20"
 
 env:
   REPO_LINK: ${{ github.event.inputs.REPO_LINK }}
@@ -23,11 +23,11 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
+
       - name: Initializing build environment
         run: |
           sudo apt update && sudo apt upgrade
