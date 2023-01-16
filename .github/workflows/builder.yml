@@ -6,11 +6,11 @@ on:
          REPO_LINK:
           description: "Kernel Tree Repo Link"
           required: true
-          default: "https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git"
+          default: "https://github.com/violesec/kernel.git"
 
          BRANCH_NAME:
           description: "Kernel Tree Branch Name"
-          required: true
+          required: false
           default: "lineage-20"
 
 env:
