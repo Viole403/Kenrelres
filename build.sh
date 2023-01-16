@@ -223,15 +223,15 @@ START=$(date +"%s")
 ##----------------------------------------------------------------##
 # function zipping() {
 # 	# Copy Files To AnyKernel3 Zip
-# 	cp $IMAGE AnyKernel3
+	cp $IMAGE AnyKernel3
 	
-# 	# Zipping and Push Kernel
-# 	cd AnyKernel3 || exit 1
-#         zip -r9 ${FINAL_ZIP} *
-#         MD5CHECK=$(md5sum "$FINAL_ZIP" | cut -d' ' -f1)
-#         push "$FINAL_ZIP" "Build took : $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s) | For <b>$MODEL ($DEVICE)</b> | <b>${KBUILD_COMPILER_STRING}</b> | <b>MD5 Checksum : </b><code>$MD5CHECK</code>"
-#         cd ..
-#         }
+	# Zipping and Push Kernel
+	cd AnyKernel3 || exit 1
+        zip -r9 ${FINAL_ZIP} *
+        MD5CHECK=$(md5sum "$FINAL_ZIP" | cut -d' ' -f1)
+        push "$FINAL_ZIP" "Build took : $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s) | For <b>$MODEL ($DEVICE)</b> | <b>${KBUILD_COMPILER_STRING}</b> | <b>MD5 Checksum : </b><code>$MD5CHECK</code>"
+        cd ..
+        }
     
 ##----------------------------------------------------------##
 
@@ -241,6 +241,6 @@ configs
 compile
 END=$(date +"%s")
 DIFF=$(($END - $START))
-# zipping
+zipping
 
 ##----------------*****-----------------------------##

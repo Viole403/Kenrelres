@@ -29,7 +29,7 @@ env:
   TZ: Asia/Shanghai
   ARCH: arm64
   SUBARCH: arm64
-  DEVICE: cepheus
+  DEVICE: lancelot
   USE_CCACHE: 1
   CCACHE_DIR: ~/.ccache
   BUILDER: /workdir/tc-build/install/bin/
@@ -95,7 +95,7 @@ jobs:
       working-directory: /workdir/kernel
       run: |
         make O=out $DEVICE_defconfig
-
+        
     - name: Compile Source
       working-directory: /workdir/kernel
       run: |
@@ -107,9 +107,9 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         working-directory: /workdir/kernel
-        name: MIUI_Kernel_${{ env.DEVICE }}
+        name: Kernel_${{ env.DEVICE }}
         path: /workdir/kernel/out/arch/arm64/boot/
-       
+
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
       with:
