@@ -31,6 +31,7 @@ env:
   CONFIG_FILE: .config
   # UPLOAD_BIN_DIR: true
   # UPLOAD_RELEASE: true
+  EXTERNAL_URL: https://github.com/violesec/Kenrelres.git
   ANYKERNEL_URL: https://github.com/osm0sis/AnyKernel3
   TZ: Asia/Jakarta
   ARCH: arm64
@@ -68,6 +69,7 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
+        git clone $EXTERNAL_URL extra
         git clone $ANYKERNEL_URL anykernel
         rm -rf ./anykernel/.github && rm -rf ./anykernel/README.md && rm -rf ./anykernel/.git && rm -rf ./anykernel/anykernel.sh
         git clone --depth=1 $REPO_URL -b $REPO_BRANCH kernel
@@ -88,13 +90,13 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    - name: Kernel Custom Script
-      working-directory: /workdir
-      if: (github.event.inputs.custom == 'true' && github.event.inputs.custom  != 'false') || contains(github.event.action, 'custom')
-      run: |
-        cp ./extra/custom.sh ./kernel/
-        chmod +x ./kernel/custom.sh
-        bash ./kernel/custom.sh
+    # - name: Kernel Custom Script
+    #   working-directory: /workdir
+    #   if: (github.event.inputs.custom == 'true' && github.event.inputs.custom  != 'false') || contains(github.event.action, 'custom')
+    #   run: |
+    #     cp ./extra/custom.sh ./kernel/
+    #     chmod +x ./kernel/custom.sh
+    #     bash ./kernel/custom.sh
 
     - name: Set DEVICE
       working-directory: /workdir/kernel
