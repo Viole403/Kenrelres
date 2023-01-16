@@ -10,8 +10,8 @@ on:
 
          BRANCH_NAME:
           description: "Kernel Tree Branch Name"
-          required: false
-          default: "lineage-20"
+          required: true
+          default: "main"
 
 env:
   REPO_LINK: ${{ github.event.inputs.REPO_LINK }}
