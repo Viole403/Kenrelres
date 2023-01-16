@@ -6,10 +6,10 @@ task:
     name: "Kernel deploy.."
     timeout_in: 2h
     container:
-        image: nexgang/ubuntu:latest
+        image: violesec/ubuntu:latest
         cpu: 4
         memory: 16G
 
   Build_script:
-        - git clone --depth=1 -b lineage-20 https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768 lv && cd lv
+        - git clone --depth=1 -b lineage-20 https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git lv && cd lv
         - bash build.sh --proton 
