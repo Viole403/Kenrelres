@@ -7,7 +7,7 @@
 # Description: Build MIUI Kernel using GitHub Actions
 #
 
-name: Build MIUI Kernel (LLVM)
+name: Build Kernel (LLVM)
 
 on:
   repository_dispatch:
@@ -22,11 +22,11 @@ env:
   REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
   REPO_BRANCH: lineage-20
   COMPER_URL: https://github.com/llvm/llvm-project/releases/download/llvmorg
-  COMPER_VERSION: 15.0.6
+  COMPER_VERSION: 15.0.7
   COMPER_TARGET: x86_64-linux-gnu-ubuntu-18.04
   CONFIG_FILE: .config
   EXTERNAL_URL: https://github.com/SkyFaklist/Unversial_AndroidKernel_Builder.git
-  TZ: Asia/Shanghai
+  TZ: Asia/Jakarta
   ARCH: arm64
   SUBARCH: arm64
   DEVICE: lancelot
@@ -95,7 +95,7 @@ jobs:
       working-directory: /workdir/kernel
       run: |
         make O=out $DEVICE_defconfig
-        
+
     - name: Compile Source
       working-directory: /workdir/kernel
       run: |

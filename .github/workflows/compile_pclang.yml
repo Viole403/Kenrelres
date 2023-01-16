@@ -7,7 +7,7 @@
 # Description: Build MIUI Kernel using GitHub Actions
 #
 
-name: Build MIUI Kernel (Proton-Clang)
+name: Build Kernel (Proton-Clang)
 
 on:
   repository_dispatch:
@@ -17,19 +17,25 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+      custom:
+        description: 'Run custom script'
+        required: false
+        default: 'false'
 
 env:
+  UPLOAD_BIN_DIR: true
+  UPLOAD_RELEASE: true
   REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
   REPO_BRANCH: lineage-20
   COMPER_URL: https://github.com/kdrag0n/proton-clang.git
   CONFIG_FILE: .config
-  UPLOAD_BIN_DIR: true
-  UPLOAD_RELEASE: true
-  EXTERNAL_URL: https://github.com/SkyFaklist/Unversial_AndroidKernel_Builder.git
-  TZ: Asia/Shanghai
+  # UPLOAD_BIN_DIR: true
+  # UPLOAD_RELEASE: true
+  ANYKERNEL_URL: https://github.com/osm0sis/AnyKernel3
+  TZ: Asia/Jakarta
   ARCH: arm64
   SUBARCH: arm64
-  DEVICE: cepheus
+  DEVICE: lancelot
   DEVICE_FULL: lancelot_defconfig
   USE_CCACHE: 1
   CCACHE_DIR: ~/.ccache
@@ -62,10 +68,12 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone $EXTERNAL_URL extra
+        git clone $ANYKERNEL_URL anykernel
+        rm -rf ./anykernel/.github && rm -rf ./anykernel/README.md && rm -rf ./anykernel/.git && rm -rf ./anykernel/anykernel.sh
         git clone --depth=1 $REPO_URL -b $REPO_BRANCH kernel
         git clone --depth=1 $COMPER_URL toolchain
         cp ./extra/compile.sh ./kernel/
+        cp ./extra/anykernel.sh ./anykernel/
         ln -sf /workdir/kernel $GITHUB_WORKSPACE/kernel
 
     - name: Set Cache
@@ -80,6 +88,14 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
+    - name: Kernel Custom Script
+      working-directory: /workdir
+      if: (github.event.inputs.custom == 'true' && github.event.inputs.custom  != 'false') || contains(github.event.action, 'custom')
+      run: |
+        cp ./extra/custom.sh ./kernel/
+        chmod +x ./kernel/custom.sh
+        bash ./kernel/custom.sh
+
     - name: Set DEVICE
       working-directory: /workdir/kernel
       run: |
@@ -91,14 +107,33 @@ jobs:
         chmod +x ./compile.sh
         bash ./compile.sh
         ls /workdir/kernel/out/arch/arm64/boot/
-        
+
+    - name: Pack Kernel
+      working-directory: /workdir
+      run: |
+        cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
+
+    - name : Upload All Result
+      uses: actions/upload-artifact@main
+      with:
+        working-directory: /workdir/kernel
+        name: Kernel_${{ env.DEVICE }}
+        path: /workdir/kernel/out/
+
     - name: Upload Kernel directory
       uses: actions/upload-artifact@main
       with:
         working-directory: /workdir/kernel
-        name: MIUI_Kernel_${{ env.DEVICE }}
+        name: Kernel_${{ env.DEVICE }}
         path: /workdir/kernel/out/arch/arm64/boot/
-       
+
+    - name: Upload Kernel Patcher
+      uses: actions/upload-artifact@main
+      with:
+        working-directory: /workdir
+        name: Kernel_${{ env.DEVICE }}_Anykernel
+        path: /workdir/anykernel/
+
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
       with:
