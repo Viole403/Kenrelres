@@ -25,7 +25,8 @@ on:
 env:
   UPLOAD_BIN_DIR: true
   UPLOAD_RELEASE: true
-  REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
+  # REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
+  REPO_URL: https://github.com/Redmi-MT6768/android_kernel_xiaomi_mt6768.git
   REPO_BRANCH: lineage-20
   COMPER_URL: https://github.com/kdrag0n/proton-clang.git
   CONFIG_FILE: .config
@@ -90,13 +91,13 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    # - name: Kernel Custom Script
-    #   working-directory: /workdir
-    #   if: (github.event.inputs.custom == 'true' && github.event.inputs.custom  != 'false') || contains(github.event.action, 'custom')
-    #   run: |
-    #     cp ./extra/custom.sh ./kernel/
-    #     chmod +x ./kernel/custom.sh
-    #     bash ./kernel/custom.sh
+    - name: Kernel Custom Script
+      working-directory: /workdir
+      if: (github.event.inputs.custom == 'true' && github.event.inputs.custom  != 'false') || contains(github.event.action, 'custom')
+      run: |
+        cp ./extra/custom.sh ./kernel/
+        chmod +x ./kernel/custom.sh
+        bash ./kernel/custom.sh
 
     - name: Set DEVICE
       working-directory: /workdir/kernel
@@ -115,12 +116,12 @@ jobs:
       run: |
         cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
 
-    - name : Upload All Result
-      uses: actions/upload-artifact@main
-      with:
-        working-directory: /workdir/kernel
-        name: Kernel_${{ env.DEVICE }}
-        path: /workdir/kernel/out/
+    # - name : Upload All Result
+    #   uses: actions/upload-artifact@main
+    #   with:
+    #     working-directory: /workdir/kernel
+    #     name: Kernel_${{ env.DEVICE }}
+    #     path: /workdir/kernel/out/
 
     - name: Upload Kernel directory
       uses: actions/upload-artifact@main
