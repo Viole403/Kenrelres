@@ -7,7 +7,7 @@
 # Description: Build MIUI Kernel using GitHub Actions
 #
 
-name: Build MIUI Kernel (LLVM)
+name: Build Kernel (LLVM)
 
 on:
   repository_dispatch:

@@ -19,8 +19,10 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
-  REPO_BRANCH: lineage-20
+  # REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
+  # REPO_BRANCH: lineage-20
+  REPO_URL: https://github.com/JR205-5000/JR205-6768.git
+  REPO_BRANCH: Liella!
   COMPER_URL: https://github.com/kdrag0n/proton-clang.git
   CONFIG_FILE: .config
   UPLOAD_BIN_DIR: true
