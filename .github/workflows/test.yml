@@ -1,4 +1,4 @@
-name: Build Kernel (CINCAU TC)
+name: Build Kernel (TEST)
 
 on:
   repository_dispatch:
