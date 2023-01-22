@@ -15,7 +15,7 @@ git clone --depth=1 https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.g
 # Main Declaration
 # export KERNEL_NAME=$(cat "arch/arm64/configs/$DEVICE_DEFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
 KERNEL_ROOTDIR=$(pwd)/base # IMPORTANT ! Fill with your kernel source root directory.
-DEVICE_CODENAME=lacelot
+DEVICE_CODENAME=lancelot
 DEVICE_DEFCONFIG=lancelot_defconfig # IMPORTANT ! Declare your kernel source defconfig file here.
 CLANG_ROOTDIR=$(pwd)/CincauTC # IMPORTANT! Put your clang directory here.
 export KBUILD_BUILD_USER=Violesec # Change with your own name or else.
@@ -28,8 +28,10 @@ DATE=$(date +"%F-%S")
 DATE2=$(date +"%m%d")
 START=$(date +"%s")
 PATH="${PATH}:${CLANG_ROOTDIR}/bin:$(pwd)/gcc/bin:$(pwd)/gcc32/bin:${PATH}"
-DTB=$(pwd)/kernel/out/arch/arm64/boot/dts/mediatek/mt6768.dtb
-DTBO=$(pwd)/kernel/out/arch/arm64/boot/dtbo.img
+# DTB=$(pwd)/kernel/out/arch/arm64/boot/dts/mediatek/mt6768.dtb
+# DTBO=$(pwd)/kernel/out/arch/arm64/boot/dtbo.img
+DTB=$(pwd)/base/out/arch/arm64/boot/dts/mediatek/mt6768.dtb
+DTBO=$(pwd)/base/out/arch/arm64/boot/dtbo.img
 
 TG_TOKEN="5949789016:AAELlNju5cK57v5gqMc29COUGgcT8lVdFh4"
 TG_CHAT_ID="468268008"
