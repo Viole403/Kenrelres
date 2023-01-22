@@ -63,10 +63,10 @@ jobs:
         chmod +x ./base/lancelot.sh
         bash ./base/lancelot.sh
 
-    - name: Set Device
-      working-directory: /base
-      run: |
-        make O=out $DEVICE_FULL
+    # - name: Set Device
+    #   working-directory: /base
+    #   run: |
+    #     make O=out $DEVICE_FULL
 
     - name: Compile Source
       working-directory: /base
