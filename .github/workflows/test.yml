@@ -51,7 +51,7 @@ jobs:
         sudo chown $USER:$GROUPS /base
 
     - name: Set Cache
-      working-directory: /base/kernel
+      working-directory: /base/
       run: |
         ccache -M 15G
 
@@ -62,3 +62,15 @@ jobs:
         cp ./extra/lancelot.sh ./base/
         chmod +x ./base/lancelot.sh
         bash ./base/lancelot.sh
+
+    - name: Set Device
+      working-directory: /base
+      run: |
+        make O=out $DEVICE_FULL
+
+    - name: Compile Source
+      working-directory: /wbase
+      run: |
+        chmod +x ./compile.sh
+        bash ./compile.sh
+        ls /base/out/arch/arm64/boot/
