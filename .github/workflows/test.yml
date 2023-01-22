@@ -49,7 +49,7 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /base
         sudo chown $USER:$GROUPS /base
-        git clone https://github.com/violesec/Kenrelres.git extra
+        # git clone https://github.com/violesec/Kenrelres.git extra
 
     - name: Set Cache
       working-directory: /base/
@@ -72,6 +72,7 @@ jobs:
     - name: Compile Source
       working-directory: /base
       run: |
+        git clone https://github.com/violesec/Kenrelres.git extra
         cp ./base/extra/lancelot.sh ./base/
         chmod +x ./lancelot.sh
         bash ./lancelot.sh
