@@ -72,7 +72,7 @@ jobs:
     - name: Compile Source
       working-directory: /base
       run: |
-        cp ./extra/lancelot.sh ./base/
+        cp ./base/extra/lancelot.sh ./base/
         chmod +x ./lancelot.sh
         bash ./lancelot.sh
         ls /base/out/arch/arm64/boot/
