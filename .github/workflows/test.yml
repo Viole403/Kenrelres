@@ -69,8 +69,8 @@ jobs:
         make O=out $DEVICE_FULL
 
     - name: Compile Source
-      working-directory: /wbase
+      working-directory: /base
       run: |
-        chmod +x ./compile.sh
-        bash ./compile.sh
+        chmod +x ./lancelot.sh
+        bash ./lancelot.sh
         ls /base/out/arch/arm64/boot/
