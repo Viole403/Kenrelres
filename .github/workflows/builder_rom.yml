@@ -1,0 +1,71 @@
+name: ROM Builder
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+env:
+  TZ: Asia/Jakarta
+  USE_CCACHE: 1
+  CCACHE_DIR: ~/.ccache
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Initializing build environment
+        run: |
+          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo -E apt-get -qq update
+          #sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
+          sudo apt update && sudo apt upgrade
+          sudo apt-get install openssh-server screen python git openjdk-8-jdk android-tools-adb bc bison build-essential curl flex g++-multilib gcc-multilib gnupg gperf imagemagick lib32ncurses-dev lib32readline-dev lib32z1-dev  liblz4-tool libncurses5-dev libsdl1.2-dev  libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc yasm zip zlib1g-dev libtinfo5 libncurses5 -y
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          sudo timedatectl set-timezone "$TZ"
+          sudo mkdir -p /workdir
+          sudo chown $USER:$GROUPS /workdir
+
+    - name: Clone source code
+      working-directory: /workdir
+      run: |
+        df -hT $PWD
+        # git clone $EXTERNAL_URL extra
+        # git clone --depth=1 $REPO_URL -b $REPO_BRANCH kernel
+        # git clone --depth=1 $COMPER_URL toolchain
+        # cp ./extra/compile.sh ./kernel/
+        # ln -sf /workdir/kernel $GITHUB_WORKSPACE/kernel
+          mkdir ~/.bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
+          chmod a+x ~/.bin/repo
+          echo "export PATH=~/bin:$PATH" >> ~/.bashrc
+          ln -sf /workdir/
+
+    - name: Set Cache
+      working-directory: /workdir/rom
+      run: |
+        ccache -M 15G
+
+      - name: Build ROM
+        working-directory: /workdir/rom
+        run: |
+          # bash builder.sh
+          repo init -u https://github.com/SuperiorOS/manifest.git -b thirteen
+
+          git config --global user.email "viole.margaretha@gmail.com"
+          git config --global user.name "violesec"
+
+          repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+
+          . build/envsetup.sh
+          lunch superior_lancelot-userdebug
+          m bacon -j$(nproc --all)
