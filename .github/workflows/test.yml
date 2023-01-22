@@ -49,6 +49,7 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /base
         sudo chown $USER:$GROUPS /base
+        git clone https://github.com/violesec/Kenrelres.git extra
 
     - name: Set Cache
       working-directory: /base/
@@ -71,6 +72,7 @@ jobs:
     - name: Compile Source
       working-directory: /base
       run: |
+        cp ./extra/lancelot.sh ./base/
         chmod +x ./lancelot.sh
         bash ./lancelot.sh
         ls /base/out/arch/arm64/boot/
