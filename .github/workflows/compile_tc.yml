@@ -7,7 +7,7 @@
 # Description: Build MIUI Kernel using GitHub Actions
 #
 
-name: Build Kernel (Proton-Clang)
+name: Build Kernel (TC)
 
 on:
   repository_dispatch:
