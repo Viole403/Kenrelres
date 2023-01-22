@@ -49,3 +49,16 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /base
         sudo chown $USER:$GROUPS /base
+
+    - name: Set Cache
+      working-directory: /base/kernel
+      run: |
+        ccache -M 15G
+
+    - name: Kernel Custom Script (${{github.event.inputs.custom}})
+      working-directory: /base
+      if: (github.event.inputs.custom == 'true' && github.event.inputs.custom  != 'false') || contains(github.event.action, 'custom')
+      run: |
+        cp ./extra/lancelot.sh ./base/
+        chmod +x ./base/lancelot.sh
+        bash ./base/lancelot.sh
