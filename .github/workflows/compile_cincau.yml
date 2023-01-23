@@ -73,6 +73,7 @@ jobs:
     - name: Clone source code
       working-directory: /workdir
       run: |
+        pwd
         df -hT $PWD
         git clone $EXTERNAL_URL extra
         git clone $ANYKERNEL_URL anykernel
