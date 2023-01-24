@@ -29,8 +29,12 @@ on:
 env:
   UPLOAD_BIN_DIR: true
   UPLOAD_RELEASE: true
-  REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
-  REPO_BRANCH: lineage-20
+  # REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
+  # REPO_BRANCH: lineage-20
+  
+  REPO_URL: https://github.com/Arafattex/oc_a13r.git
+  REPO_BRANCH: a13r
+
   COMPER_URL: https://github.com/kdrag0n/proton-clang.git
   CONFIG_FILE: .config
   EXTERNAL_URL: https://github.com/violesec/Kenrelres.git
@@ -149,3 +153,15 @@ jobs:
     #   with:
     #     retain_days: 1
     #     keep_minimum_runs: 3
+  
+  cleanup:
+    needs: [build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - name: call webhook to delete artifacts
+      env:
+        FOR_WEBHOOKS_SECRET: ${{ secrets.FOR_WEBHOOKS_SECRET }}
+      run: |
+        echo "::add-mask::$FOR_WEBHOOKS_SECRET"
+        curl --verbose --fail --show-error --location --request POST "https://api.github.com/repos/$GITHUB_REPOSITORY/dispatches" --header "Authorization: token $FOR_WEBHOOKS_SECRET" --header 'Content-Type: application/json' --header 'Accept: application/vnd.github.everest-preview+json' --data-raw "{ \"event_type\": \"delete_all_artifacts\", \"client_payload\": {\"parent_runid\": \"$GITHUB_RUN_ID\", \"parent_repo\": \"$GITHUB_REPOSITORY\"} }"
