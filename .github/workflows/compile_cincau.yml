@@ -31,13 +31,16 @@ env:
   UPLOAD_RELEASE: true
   REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
   REPO_BRANCH: lineage-20
+  
   # COMPER_URL: https://github.com/kdrag0n/proton-clang.git
   COMPER_URL: https://github.com/CincauEXE/CincauTC.git
   GCC: https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu.git
   GCC32: https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi.git
+  
   CONFIG_FILE: .config
   EXTERNAL_URL: https://github.com/violesec/Kenrelres.git
   ANYKERNEL_URL: https://github.com/Viole403/Anykernel3.git 
+  
   TZ: Asia/Jakarta
   ARCH: arm64
   SUBARCH: arm64
@@ -46,7 +49,6 @@ env:
   USE_CCACHE: 1
   CCACHE_DIR: ~/.ccache
   BUILDER: /workdir/toolchain/bin/
-  
 
 jobs:
   build:
