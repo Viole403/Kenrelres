@@ -1,0 +1,172 @@
+#
+# Copyright (c) 2022-2023 SkyFaklist
+#
+# This is free software, licensed under the GPL License.
+# See /LICENSE for more information.
+#
+# Description: Build MIUI Kernel using GitHub Actions
+#
+
+name: Build Kernel (Nexus-Clang)
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+      custom:
+        description: 'Run custom script'
+        required: false
+        default: 'false'
+      kernelsu:
+        description: 'Compile KernelSU'
+        required: false
+        default: 'false'
+
+env:
+  UPLOAD_BIN_DIR: true
+  UPLOAD_RELEASE: true
+  # REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git
+  # REPO_BRANCH: lineage-20
+  
+  REPO_URL: https://github.com/Arafattex/oc_a13r.git
+  REPO_BRANCH: a13r
+
+  COMPER_URL: https://gitlab.com/Project-Nexus/nexus-clang.git
+  COMPER_BRANCH: nexus-15
+
+  CONFIG_FILE: .config
+
+  EXTERNAL_URL: https://github.com/violesec/Kenrelres.git
+  ANYKERNEL_URL: https://github.com/Viole403/Anykernel3.git 
+  
+  TZ: Asia/Jakarta
+  
+  ARCH: arm64
+  SUBARCH: arm64
+  DEVICE: lancelot
+  DEVICE_FULL: lancelot_defconfig
+  USE_CCACHE: 1
+  CCACHE_DIR: ~/.ccache
+  BUILDER: /workdir/toolchain/bin/
+  
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        #sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
+        sudo -E apt-get install -y bc bison build-essential binutils-dev ca-certificates ccache cmake curl flex file g++-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libncurses5-dev libsdl1.2-dev libssl-dev libwxgtk3.0-gtk3-dev libc6-i386 libxml2 libxml2-utils lld lzop ninja-build pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev unzip openjdk-8-jdk language-pack-zh-hans texinfo python python3.7 vim u-boot-tools xz-utils zlib1g-dev
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+
+    - name: Clone source code
+      working-directory: /workdir
+      run: |
+        df -hT $PWD
+        git clone $EXTERNAL_URL extra
+        git clone $ANYKERNEL_URL anykernel
+        rm -rf ./anykernel/.github && rm -rf ./anykernel/README.md && rm -rf ./anykernel/.git && rm -rf ./anykernel/anykernel.sh
+        git clone --depth=1 $REPO_URL -b $REPO_BRANCH kernel
+        git clone --depth=1 $COMPER_URL -b $COMPER_BRANCH toolchain
+        cp ./extra/compile.sh ./kernel/
+        cp ./extra/anykernel.sh ./anykernel/
+        ln -sf /workdir/kernel $GITHUB_WORKSPACE/kernel
+
+    - name: Set Cache
+      working-directory: /workdir/kernel
+      run: |
+        ccache -M 15G
+        
+    - name: Patch KernelSU (${{github.event.inputs.kernelsu}})
+      working-directory: /workdir/kernel
+      if: (github.event.inputs.kernelsu == 'true' && github.event.inputs.kernelsu  != 'false') || contains(github.event.action, 'kernelsu')
+      run: |
+        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+
+    - name: Kernel Custom Script (${{github.event.inputs.custom}})
+      working-directory: /workdir
+      if: (github.event.inputs.custom == 'true' && github.event.inputs.custom  != 'false') || contains(github.event.action, 'custom')
+      run: |
+        cp ./extra/custom.sh ./kernel/
+        chmod +x ./kernel/custom.sh
+        bash ./kernel/custom.sh
+
+    - name: SSH connection to Actions (${{github.event.inputs.ssh}})
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+    - name: Set Device
+      working-directory: /workdir/kernel
+      run: |
+        make O=out ARCH=$ARCH $DEVICE_FULL
+
+    - name: Compile Source
+      working-directory: /workdir/kernel
+      run: |
+        chmod +x ./compile.sh
+        bash ./compile.sh
+        ls /workdir/kernel/out/arch/arm64/boot/
+
+    - name: Pack Kernel
+      working-directory: /workdir
+      run: |
+        cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
+
+    # - name : Upload All Result
+    #   uses: actions/upload-artifact@main
+    #   with:
+    #     working-directory: /workdir/kernel
+    #     name: Kernel_${{ env.DEVICE }}
+    #     path: /workdir/kernel/out/
+
+    - name: Upload Kernel directory
+      uses: actions/upload-artifact@main
+      with:
+        working-directory: /workdir/kernel
+        name: Kernel_${{ env.DEVICE }}
+        path: /workdir/kernel/out/arch/arm64/boot/
+
+    - name: Upload Kernel Patcher
+      uses: actions/upload-artifact@main
+      with:
+        working-directory: /workdir
+        name: Kernel_${{ env.DEVICE }}_Anykernel
+        path: /workdir/anykernel/
+
+    # - name: Delete workflow runs
+    #   uses: GitRML/delete-workflow-runs@main
+    #   with:
+    #     retain_days: 1
+    #     keep_minimum_runs: 3
+  
+  cleanup:
+    needs: [build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - name: call webhook to delete artifacts
+      env:
+        FOR_WEBHOOKS_SECRET: ${{ secrets.FOR_WEBHOOKS_SECRET }}
+      run: |
+        echo "::add-mask::$FOR_WEBHOOKS_SECRET"
+        curl --verbose --fail --show-error --location --request POST "https://api.github.com/repos/$GITHUB_REPOSITORY/dispatches" --header "Authorization: token $FOR_WEBHOOKS_SECRET" --header 'Content-Type: application/json' --header 'Accept: application/vnd.github.everest-preview+json' --data-raw "{ \"event_type\": \"delete_all_artifacts\", \"client_payload\": {\"parent_runid\": \"$GITHUB_RUN_ID\", \"parent_repo\": \"$GITHUB_REPOSITORY\"} }"
