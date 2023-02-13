@@ -35,7 +35,7 @@ env:
   # REPO_URL: https://github.com/Arafattex/oc_a13r.git
   # REPO_BRANCH: a13r
 
-  REPO_URL: https://github.com/Viole403/android_kernel_xiaomi_mt6768.git
+  REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768
   REPO_BRANCH: lineage-20
 
   COMPER_URL: https://github.com/kdrag0n/proton-clang.git
