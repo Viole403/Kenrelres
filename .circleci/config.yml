@@ -17,13 +17,7 @@ jobs:
       - run:
           name: "Building Kernel"
           command: |
-	    wget https://raw.githubusercontent.com/Viole403/Kenrelres/main/build.sh
-	    chmod +x build.sh
-	    bash lancelot.sh
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
-#workflows:
-#  say-hello-workflow:
-#    jobs:
-#      - say-hello
+            wget https://raw.githubusercontent.com/Viole403/Kenrelres/main/build.sh
+            curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+	          chmod +x build.sh
+	          bash build.sh
