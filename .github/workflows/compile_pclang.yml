@@ -118,6 +118,13 @@ jobs:
       run: |
         make O=out $DEVICE_FULL
 
+    - name: Upload Config File
+      uses: actions/upload-artifact@main
+      with:
+        working-directory: /workdir
+        name: .config_${{ env.DEVICE }}
+        path: /workdir/kernel/out/.config
+
     - name: Compile Source
       working-directory: /workdir/kernel
       run: |
