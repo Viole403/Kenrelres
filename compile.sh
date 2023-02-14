@@ -4,8 +4,12 @@ starttime=`date +'%Y-%m-%d %H:%M:%S'`
 export ARCH=arm64
 export SUBARCH=arm64
 
-PATH="$BUILDER:$PATH"
-make -j$(nproc --all) O=out \
+# PATH="$BUILDER:$PATH"
+DEVICE_CONFIG=lancelot_defconfig
+
+PATH="/home/circleci/project/toolchain:$PATH"
+
+make -j$(nproc --all) O=out $DEVICE_CONFIG \
     NM=llvm-nm \
     OBJCOPY=llvm-objcopy \
     LD=ld.lld \
