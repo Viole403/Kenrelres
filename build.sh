@@ -35,7 +35,7 @@ DATE=$(TZ=Asia/Jakarta date +"%Y%m%d-%T")
 TANGGAL=$(date +"%F%S")
 
 # Specify Final Zip Name
-ZIPNAME=Nexus
+ZIPNAME=Lancelot
 FINAL_ZIP=${ZIPNAME}-${VERSION}-${DEVICE}-Kernel-${TANGGAL}.zip
 
 ##----------------------------------------------------------##
@@ -55,7 +55,7 @@ then
 COMPILER=azure
 elif [ "$1" = "--nexus" ];
 then
-COMPILER=nexus
+COMPILER=proton
 fi
 
 ##----------------------------------------------------------##
@@ -129,7 +129,7 @@ function exports() {
         
         # KBUILD HOST and USER
         export KBUILD_BUILD_HOST=ArchLinux
-        export KBUILD_BUILD_USER="Prashant"
+        export KBUILD_BUILD_USER="Viole403"
         
         # CI
         if [ "$CI" ]
