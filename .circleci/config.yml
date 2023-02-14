@@ -19,7 +19,9 @@ jobs:
           command: |
             sudo -E apt-get install -y bc bison build-essential binutils-dev ca-certificates ccache cmake curl flex file g++-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libncurses5-dev libsdl1.2-dev libssl-dev libwxgtk3.0-gtk3-dev libc6-i386 libxml2 libxml2-utils lld lzop ninja-build pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev unzip openjdk-8-jdk language-pack-zh-hans texinfo python python3.7 vim u-boot-tools xz-utils zlib1g-dev
             git clone https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768.git kernel --depth 1
+            pwd
             cd kernel
+            pwd
             wget https://raw.githubusercontent.com/Viole403/Kenrelres/main/build.sh
             chmod +x build.sh
             bash build.sh
