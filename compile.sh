@@ -4,6 +4,7 @@ starttime=`date +'%Y-%m-%d %H:%M:%S'`
 # Export ARCH and SUBARCH
 export ARCH=arm64
 export SUBARCH=arm64
+export DTC_EXT=dtc
 
 # KBUILD HOST and USER
 export KBUILD_BUILD_HOST=ArchLinux
@@ -15,14 +16,17 @@ PATH="$BUILDER:$PATH"
 # PATH="/home/circleci/project/toolchain:$PATH"
 
 make -kj$(nproc --all) O=out $DEVICE_FULL \
-    NM=llvm-nm \
-    OBJCOPY=llvm-objcopy \
-    LD=ld.lld \
+    ARCH=arm64 \
+    AR=llvm-ar \
+    AS=llvm-as \
     CROSS_COMPILE=aarch64-linux-gnu- \
     CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
     CC=clang \
-    AR=llvm-ar \
+    LD=ld.lld \
+    NM=llvm-nm \
+    OBJCOPY=llvm-objcopy \
     OBJDUMP=llvm-objdump \
+    READELF=llvm-readelf \
     STRIP=llvm-strip \
     # ARCH=arm64 \
     # AR=llvm-ar \

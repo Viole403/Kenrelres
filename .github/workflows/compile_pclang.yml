@@ -19,12 +19,12 @@ on:
         default: 'false'
       custom:
         description: 'Run custom script'
-        required: true
-        default: 'true'
+        required: false
+        default: 'false'
       kernelsu:
         description: 'Compile KernelSU'
-        required: true
-        default: 'true'
+        required: false
+        default: 'false'
 
 env:
   UPLOAD_BIN_DIR: true
@@ -138,6 +138,7 @@ jobs:
       working-directory: /workdir
       run: |
         cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
+        cp /workdir/kernel/out/arch/arm64/boot/dtbo.img ./anykernel/dtbo.img
 
     # - name : Upload All Result
     #   uses: actions/upload-artifact@main
