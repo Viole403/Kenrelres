@@ -19,12 +19,12 @@ on:
         default: 'false'
       custom:
         description: 'Run custom script'
-        required: false
-        default: 'false'
+        required: true
+        default: 'true'
       kernelsu:
         description: 'Compile KernelSU'
-        required: false
-        default: 'false'
+        required: true
+        default: 'true'
 
 env:
   UPLOAD_BIN_DIR: true
