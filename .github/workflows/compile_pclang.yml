@@ -132,13 +132,14 @@ jobs:
       run: |
         chmod +x ./compile.sh
         bash ./compile.sh
-        ls /workdir/kernel/out/arch/arm64/boot/
+        # ls /workdir/kernel/out/arch/arm64/boot/
 
     - name: Pack Kernel
       working-directory: /workdir
       run: |
+        cp /workdir/kernel/out/arch/arm64/boot/Image.gz ./anykernel/Image.gz
         cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
-        cp /workdir/kernel/out/arch/arm64/boot/dtbo.img ./anykernel/dtbo.img
+        cp /workdir/kernel/out/arch/arm64dts/mediatek/mt6768.dtb ./anykernel/mt6768.dtb
 
     # - name : Upload All Result
     #   uses: actions/upload-artifact@main
