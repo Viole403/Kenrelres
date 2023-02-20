@@ -10,11 +10,11 @@ export KBUILD_BUILD_HOST=ArchLinux
 export KBUILD_BUILD_USER="Viole403"
 
 PATH="$BUILDER:$PATH"
-DEVICE_CONFIG=lancelot_defconfig
+# DEVICE_CONFIG=lancelot_defconfig
 
 # PATH="/home/circleci/project/toolchain:$PATH"
 
-make -kj$(nproc --all) O=out $DEVICE_CONFIG \
+make -kj$(nproc --all) O=out $DEVICE_FULL \
     NM=llvm-nm \
     OBJCOPY=llvm-objcopy \
     LD=ld.lld \
