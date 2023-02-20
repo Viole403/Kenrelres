@@ -137,9 +137,8 @@ jobs:
     - name: Pack Kernel
       working-directory: /workdir
       run: |
-        cp /workdir/kernel/out/arch/arm64/boot/Image.gz ./anykernel/Image.gz
         cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
-        cp /workdir/kernel/out/arch/arm64dts/mediatek/mt6768.dtb ./anykernel/mt6768.dtb
+        cp /workdir/kernel/out/arch/arm64/dts/mediatek/mt6768.dtb ./anykernel/mt6768.dtb
 
     # - name : Upload All Result
     #   uses: actions/upload-artifact@main
@@ -148,11 +147,11 @@ jobs:
     #     name: Kernel_${{ env.DEVICE }}
     #     path: /workdir/kernel/out/
 
-    - name: Upload Kernel directory
+    - name: Upload Boot directory
       uses: actions/upload-artifact@main
       with:
         working-directory: /workdir/kernel
-        name: Kernel_${{ env.DEVICE }}
+        name: Boot_${{ env.DEVICE }}_${{ env.ARCH }}
         path: /workdir/kernel/out/arch/arm64/boot/
 
     - name: Upload Kernel Patcher
