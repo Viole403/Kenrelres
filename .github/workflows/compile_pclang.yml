@@ -134,11 +134,11 @@ jobs:
         bash ./compile.sh
         # ls /workdir/kernel/out/arch/arm64/boot/
 
-    - name: Pack Kernel
-      working-directory: /workdir
-      run: |
-        cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
-        cp /workdir/kernel/out/arch/arm64/dts/mediatek/mt6768.dtb ./anykernel/mt6768.dtb
+    # - name: Pack Kernel
+    #   working-directory: /workdir
+    #   run: |
+    #     cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
+    #     cp /workdir/kernel/out/arch/arm64/dts/mediatek/mt6768.dtb ./anykernel/mt6768.dtb
 
     # - name : Upload All Result
     #   uses: actions/upload-artifact@main
@@ -154,12 +154,12 @@ jobs:
         name: Boot_${{ env.DEVICE }}_${{ env.ARCH }}
         path: /workdir/kernel/out/arch/arm64/boot/
 
-    - name: Upload Kernel Patcher
-      uses: actions/upload-artifact@main
-      with:
-        working-directory: /workdir
-        name: Kernel_${{ env.DEVICE }}_Anykernel
-        path: /workdir/anykernel/
+    # - name: Upload Kernel Patcher
+    #   uses: actions/upload-artifact@main
+    #   with:
+    #     working-directory: /workdir
+    #     name: Kernel_${{ env.DEVICE }}_Anykernel
+    #     path: /workdir/anykernel/
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
