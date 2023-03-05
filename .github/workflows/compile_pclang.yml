@@ -20,17 +20,17 @@ on:
       custom:
         description: 'Run custom script'
         required: false
-        default: 'true'
+        default: 'false'
       kernelsu:
         description: 'Compile KernelSU'
         required: false
-        default: 'true'
+        default: 'false'
 
 env:
   UPLOAD_BIN_DIR: true
   UPLOAD_RELEASE: true
-  REPO_URL: https://github.com/Viole403/android_kernel_xiaomi_mt6768.git
-  REPO_BRANCH: kernelSU
+  REPO_URL: https://github.com/mt6768-dev/android_kernel_xiaomi_mt6768
+  REPO_BRANCH: lineage-20
   
   # REPO_URL: https://github.com/Arafattex/oc_a13r.git
   # REPO_BRANCH: a13r
@@ -134,10 +134,10 @@ jobs:
         bash ./compile.sh
         # ls /workdir/kernel/out/arch/arm64/boot/
 
-    # - name: Pack Kernel
-    #   working-directory: /workdir
-    #   run: |
-    #     cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
+    - name: Pack Kernel
+      working-directory: /workdir
+      run: |
+        cp /workdir/kernel/out/arch/arm64/boot/Image.gz-dtb ./anykernel/Image-dtb
     #     cp /workdir/kernel/out/arch/arm64/dts/mediatek/mt6768.dtb ./anykernel/mt6768.dtb
 
     # - name : Upload All Result
@@ -154,15 +154,15 @@ jobs:
         name: Boot_${{ env.DEVICE }}_${{ env.ARCH }}
         path: /workdir/kernel/out/arch/arm64/boot/
 
-    # - name: Upload Kernel Patcher
-    #   uses: actions/upload-artifact@main
-    #   with:
-    #     working-directory: /workdir
-    #     name: Kernel_${{ env.DEVICE }}_Anykernel
-    #     path: /workdir/anykernel/
+    - name: Upload Kernel Patcher
+      uses: actions/upload-artifact@main
+      with:
+        working-directory: /workdir
+        name: Kernel_${{ env.DEVICE }}_Anykernel
+        path: /workdir/anykernel/
 
-    # - name: Delete workflow runs
-    #   uses: GitRML/delete-workflow-runs@main
-    #   with:
-    #     retain_days: 1
-    #     keep_minimum_runs: 3
+    - name: Delete workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      with:
+        retain_days: 1
+        keep_minimum_runs: 3
